@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des matériels enregistrés</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .navbar-nav .nav-link:hover {
+            background-color: #ff6f61;
+            color: #fff;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            vertical-align: middle !important;
+        }
+    </style>
+</head>
+<body>
+    {% include 'gestion_de_materiel/includes/entete.html' %}
+
+    <div class="container">
+        <h1>Liste des matériels enregistrés</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom  du matériel</th>
+                    <th>Budget  du matériel</th>
+                    <th>Propriétaire du matériel</th>
+                    <th>Lieu ou le matériel se trouve</th>
+                    <th>Possesseur actuel Enseignant le possedant actuellement</th>
+                    <th>Voir les accessoires du matériel</th>
+                    <th>Suppression</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for materiel in materiels %}
+                    <tr>
+                        <td>{{ materiel.nom }}</td>
+                        <td>{{ materiel.budget }}</td>
+                        <td>{{ materiel.proprietaire.nom }} {{ materiel.proprietaire.prenom }}</td>
+                        <td>{{ materiel.lieu.nom }} ({{ materiel.lieu.etage }})</td>
+                        <td>
+                            {% if materiel.possesseur %}
+                                {{ materiel.possesseur.nom }} {{ materiel.possesseur.prenom }}
+                            {% else %}
+                                Aucun
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'liste_accessoires' materiel.id %}" class="btn btn-primary">Voir les accessoires du matériel</a>
+                        </td>
+                        <td>
+                            <form method="post" action="{% url 'supprimer_materiel' materiel.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Suppression</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7">Aucun matériel trouvé dans la liste.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>

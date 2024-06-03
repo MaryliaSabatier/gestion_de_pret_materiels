@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Créer un nouveau transfer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #bd2130;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+        }
+
+        label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% include 'gestion_de_materiel/includes/entete.html' %}
+        <h1>Créer un nouveau transfer pour le matériel suivant : {{ materiel.nom }}</h1>
+        <div class="container text-center">
+            <a href="{% url 'choix_materiel' %}" class="btn btn-primary">Choix du matériel</a>
+        </div>
+        <div style="margin-top: 10px;"></div>
+        <form method="post">
+            {% csrf_token %}
+            <!--info générales-->
+            <h2 style="text-align: center;">Informations actuelles sur le matériel</h2>
+            <div class="form-group">
+                <label style="font-weight: bold;">Le matériel :</label>
+                <input type="text" class="form-control" value="{{ materiel.nom }}" readonly>
+            </div>
+            <div class="form-group">
+                <label style="font-weight: bold;">L'enseignant possedant actuellement le matériel :</label>
+                <input type="text" class="form-control" value="{{ materiel.possesseur }}" readonly>
+            </div>
+            <div class="form-group">
+                <label style="font-weight: bold;">Lieu actuel du matériel :</label>
+                <input type="text" class="form-control" value="{{ materiel.lieu }}" readonly>
+            </div>
+            {% for accessoire in accessoires %}
+                <div class="form-group">
+                    <label style="font-weight: bold;">Nom de l'accessoire du matériel :</label>
+                    <input type="text" class="form-control" value="{{ accessoire.nom }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Présent :</label>
+                    {% if accessoire.present %}
+                        <input type="text" class="form-control" value="Oui" readonly>
+                    {% else %}
+                        <input type="text" class="form-control" value="Non" readonly>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label>État :</label>
+                    <input type="text" class="form-control" value="{{ accessoire.etat }}" readonly>
+                </div>
+            {% endfor %}
+
+            <h2 style="text-align: center;">Informations à remplir pour le matériel</h2>
+            <div class="form-group">
+                <label style="font-weight: bold;">Rendre :</label>
+                <select class="form-control" name="rendre" id="id_rendre" onchange="updateFields()">
+                    <option value="Oui">Oui</option>
+                    <option value="Non" selected>Non</option>
+                </select>
+            </div>
+
+           <div class="form-group">
+                <label style="font-weight: bold;">Le nouveau enseignant possedant le matériel : (Si le matériel est rendu, ne pas prendre en compte):</label>
+                <select class="form-control" name="nouveau_possesseur">
+                    {% for enseignant in enseignants %}
+                        <option value="{{ enseignant.id }}">
+                            {{ enseignant.nom }} {{ enseignant.prenom }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label style="font-weight: bold;">Lieu de transfert pour le matériel (Si le matériel est rendu, ne pas prendre en compte):</label>
+                <select class="form-control" name="nouveau_lieu">
+                    {% for salle in salles %}
+                        <option value="{{ salle.id }}">
+                            {{ salle.nom }} {{ salle.etage }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label style="font-weight: bold;">La date du transfert :</label>
+                <input type="date" class="form-control" name="date_transfert">
+            </div>
+            {% for accessoire in accessoires %}
+                <div class="form-group">
+                    <label style="font-weight: bold;">Nom de l'accessoire du matériel :</label>
+                    <input type="text" class="form-control" value="{{ accessoire.nom }}" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Présent :</label>
+                    <select class="form-control" name="present_{{ accessoire.id }}">
+                        <option value="Oui" {% if accessoire.present == "Oui" %}selected{% endif %}>Oui</option>
+                        <option value="Non" {% if accessoire.present == "Non" %}selected{% endif %}>Non</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>État du matériel (Si le matériel est rendu, ne pas prendre en compte):</label>
+                    <select class="form-control" name="etat_{{ accessoire.id }}">
+                        <option value="Opérationnelle" {% if accessoire.etat == "Opérationnelle" %}selected{% endif %}>Opérationnelle</option>
+                        <option value="Dysfonctionnel" {% if accessoire.etat == "Dysfonctionnel" %}selected{% endif %}>Dysfonctionnel</option>
+                        <option value="Non opérationnelle" {% if accessoire.etat == "Non opérationnelle" %}selected{% endif %}>Non opérationnelle</option>
+                    </select>
+                </div>
+            {% endfor %}
+
+            <div class="form-group">
+                <label style="font-weight: bold;">Occasion :</label>
+                <input type="text" class="form-control" name="occasion">
+            </div>
+
+            <div class="form-group">
+                <label style="font-weight: bold;">Objectif :</label>
+                <textarea class="form-control" name="objectif" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </form>
+    </div>
+</body>
+</html>
+

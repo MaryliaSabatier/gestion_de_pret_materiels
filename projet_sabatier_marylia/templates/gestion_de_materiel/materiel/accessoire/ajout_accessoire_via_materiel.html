@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ajouter un accessoire pour le matériel {{ materiel.nom }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .navbar-nav .nav-link:hover {
+            background-color: #ff6f61;
+            color: #fff;
+        }
+
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .messages h2 {
+            font-size: 18px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .messages h2.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .messages h2.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .table {
+            background-color: #fff;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-success {
+            background-color: #28a745;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'gestion_de_materiel/includes/entete.html' %}
+
+    <div class="container content">
+        <h1>Ajout d'un accessoire pour le matériel suivant :{{ materiel.nom }}</h1>
+        <a href="{% url 'liste_accessoires' materiel_id=materiel.id %}" class="btn btn-primary">Cliquez pour retourner à la liste des accessoires</a>
+        <div style="margin-top: 10px;"></div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.nom.id_for_label }}">Nom de l'accessoire à enregistrer :</label>
+                {{ form.nom }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.present.id_for_label }}">Accesoire résent :</label>
+                {{ form.present }}
+            </div>
+            <div class="form-group">
+                <label>État (Si absent ne pas prendre en compte) :</label>
+                {{ form.etat }}
+            </div>
+            <button type="submit" class="btn btn-primary">Ajouter le nouvel accesoire</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ajouter un nouvel enseignant</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .navbar-nav .nav-link:hover {
+            background-color: #ff6f61;
+            color: #fff;
+        }
+
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .messages h2 {
+            font-size: 18px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .messages h2.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .messages h2.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/gestion_de_materiel/accueil">Accueil</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="enseignantDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Enseignant</a>
+                    <div class="dropdown-menu" aria-labelledby="enseignantDropdown">
+                        <a class="dropdown-item" href="/gestion_de_materiel/enseignant/liste_enseignants">Liste des enseignants</a>
+                        <a class="dropdown-item" href="/gestion_de_materiel/enseignant/ajout_enseignant">Ajouter un enseignant</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="salleDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Salle</a>
+                    <div class="dropdown-menu" aria-labelledby="salleDropdown">
+                        <a class="dropdown-item" href="/gestion_de_materiel/salle/liste_salles">Liste des salles</a>
+                        <a class="dropdown-item" href="/gestion_de_materiel/salle/ajout_salle">Ajouter une salle</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="materielDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Matériel</a>
+                    <div class="dropdown-menu" aria-labelledby="materielDropdown">
+                        <a class="dropdown-item" href="/gestion_de_materiel/materiel/liste_materiels">Liste des matériels</a>
+                        <a class="dropdown-item" href="/gestion_de_materiel/materiel/ajout_materiel">Ajouter un matériel</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/gestion_de_materiel/transfert/choix_materiel">Transfert</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container content">
+        <h1>Ajout d'un nouvel enseignant</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_nom">Le nom de l'enseignant :</label>
+                <input type="text" class="form-control" id="id_nom" name="nom" required>
+            </div>
+            <div class="form-group">
+                <label for="id_prenom">Le prénom de l'enseignant  :</label>
+                <input type="text" class="form-control" id="id_prenom" name="prenom" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Ajout d'un nouvel enseignant</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des matériels dont {{ enseignant.nom }} {{ enseignant.prenom }} est propriétaire</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .navbar-nav .nav-link:hover {
+            background-color: #ff6f61;
+            color: #fff;
+        }
+
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .messages h2 {
+            font-size: 18px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .messages h2.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .messages h2.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .table {
+            background-color: #fff;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #032d5c;
+        }
+        .btn-success {
+            background-color: #046a1d;
+            border: none;
+        }
+        .btn-success:hover {
+            background-color: #063913;
+        }
+        .btn-danger {
+            background-color: #d50015;
+            border: none;
+        }
+        .btn-danger:hover {
+            background-color: #700007;
+        }
+    </style>
+</head>
+<body>
+    {% include 'gestion_de_materiel/includes/entete.html' %}
+
+    <div class="container content">
+        <h1>Liste des matériels de l'enseignant {{ enseignant.nom }} {{ enseignant.prenom }} dont il est propriétaire</h1>
+        <a href="{% url 'liste_enseignants' %}" class="btn btn-primary">Liste des enseignants</a>
+        <div style="margin-top: 10px;"></div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom du matériel</th>
+                    <th>Le lieu</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for materiel in materiels %}
+                    <tr>
+                        <td>{{ materiel.nom }}</td>
+                        <td>{{ materiel.lieu }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="2">Aucun matériel n'est trouvé.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>

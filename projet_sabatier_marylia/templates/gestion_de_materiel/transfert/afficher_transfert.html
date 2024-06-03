@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transfert du matériel suivant : {{ transfert.material.nom }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .navbar-nav .nav-link:hover {
+            background-color: #ff6f61;
+            color: #fff;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        h1, h2 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            background-color: #fff;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    {% include 'gestion_de_materiel/includes/entete.html' %}
+
+    <div class="container">
+        <h1>Détails du transfert du matériel - {{ transfert.material.nom }}</h1>
+        <a href="{% url 'liste_historique_transferts' materiel_id=transfert.material.id %}" class="btn btn-primary">Liste des historiques des transferts des matériels</a>
+        <div style="margin-top: 10px;"></div>
+
+        <p><strong>Le nom du matériel :</strong> {{ transfert.material.nom }}</p>
+        <p><strong>La date du transfert :</strong> {{ transfert.date_transfert }}</p>
+        <p><strong>L'objectif :</strong> {{ transfert.objectif }}</p>
+        <p><strong>Est-il d'occasion  ?:</strong> {{ transfert.occasion }}</p>
+        <p><strong>L'enseignant precendant l'ayant posseder :</strong> {{ transfert.ancien_possesseur }}</p>
+        <p><strong>L'enseignant qui le possede actuellement :</strong> {{ transfert.nouveau_possesseur }}</p>
+        <p><strong>Le lieu précédent du matériel :</strong> {{ transfert.ancien_lieu }}</p>
+        <p><strong>Le nouveau lieu du matériel:</strong> {{ transfert.nouveau_lieu }}</p>
+
+        <h2>Les accessoires</h2>
+       <table class="table table-striped">
+            <tr>
+                <th>Le nom</th>
+                <th>L'ancienne présence</th>
+                <th>La nouvelle présence</th>
+                <th>L'ancien état</th>
+                <th>Le nouvel état</th>
+            </tr>
+            {% for accessoire in transfert.transfertaccessoire_set.all %}
+                <tr>
+                    <td>{{ accessoire.accessoire.nom }}</td>
+                    <td>{% if accessoire.ancienne_presence %}Oui{% else %}Non{% endif %}</td>
+                    <td>{% if accessoire.nouvelle_presence %}Oui{% else %}Non{% endif %}</td>
+                    <td>{{ accessoire.ancien_etat }}</td>
+                    <td>{{ accessoire.nouveau_etat }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">Il n'y a pas d'accessoire associé au matériel.</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>
